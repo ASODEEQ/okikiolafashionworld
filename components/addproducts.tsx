@@ -1,5 +1,6 @@
 "use client";
 import { addProduct } from "@/lib/products-action";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 
@@ -98,11 +99,13 @@ const AddProductForm = () => {
               placeholder="Image URL"
               className="w-full rounded-lg border border-gray-300 px-4 h-12 text-sm focus:ring-2 focus:ring-pink-500 outline-none"
             />
-            {/* Live preview */}
+         
             {form.image && (
               <div className="mt-3 flex justify-center">
                 <img
                   src={form.image}
+                  // width={400}
+                  // height={400}
                   alt="Preview"
                   className="h-40 w-40 object-cover rounded-lg shadow-md border"
                   onError={(e) =>

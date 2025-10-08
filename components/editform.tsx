@@ -4,6 +4,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { updateProduct } from "@/lib/products-action";
+import Image from "next/image";
 
 interface IProduct {
   _id: string;
@@ -31,7 +32,7 @@ const EditProductForm = ({ product }: { product: IProduct }) => {
     const res = await updateProduct(form._id, form);
     if (res.success) {
       alert("✅ Product updated!");
-      router.push("/productspage");
+      router.push("/adminadd/products/deleteproduct");
     } else {
       alert("❌ Error updating product");
     }
@@ -85,6 +86,8 @@ const EditProductForm = ({ product }: { product: IProduct }) => {
       {form.image && (
         <img
           src={form.image}
+          // width={400}
+          // height={400}
           alt="Preview"
           className="h-40 w-40 object-cover rounded-lg shadow"
         />

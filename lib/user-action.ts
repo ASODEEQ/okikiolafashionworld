@@ -43,91 +43,90 @@ export const registerUser = async (user: { firstName: string, lastName:string, e
 	}
 }
 
-// export const loginAction = async ({ email, password }: {  email: string, password: string, }) => {
-// 	try {
-// 		await dbConnect()
+export const loginAction = async ({ email, password }: {  email: string, password: string}) => {
+	try {
+		await dbConnect()
+		const user = await UserModel.findOne({email});
+		if (!user) {
+			return {
+				success: false,
+				message: "User not found"
+			}
+		}
 
-// 		const user = await UserModel.findOne({ email });
-// 		if (!user) {
-// 			return {
-// 				success: false,
-// 				message: "User not found"
-// 			}
-// 		}
+		const hashedPassword = user.password;
+		const validPassword = bcrypt.compare(password, hashedPassword);
 
-// 		const hashedPassword = user.password;
-// 		const validPassword = bcrypt.compare(password, hashedPassword);
+		if (!validPassword) {
+			return {
+				success: false,
+				message: "Invalid Details"
+			}
+		}
 
-// 		if (!validPassword) {
-// 			return {
-// 				success: false,
-// 				message: "Invalid Details"
-// 			}
-// 		}
+		// const token = jwt.sign({ id: String(user._id) }, process.env.JWT_SECRET!, { expiresIn: '2h' });
 
-// 		// const token = jwt.sign({ id: String(user._id) }, process.env.JWT_SECRET!, { expiresIn: '2h' });
+		const token = await new SignJWT({ id: String(user._id) })
+			.setProtectedHeader({ alg: 'HS256' })
+			.setExpirationTime("2h").setIssuedAt().sign(encodedSecret);
 
-// 		const token = await new SignJWT({ id: String(user._id) })
-// 			.setProtectedHeader({ alg: 'HS256' })
-// 			.setExpirationTime("2h").setIssuedAt().sign(encodedSecret);
+		const cookieStore = await cookies();
 
-// 		const cookieStore = await cookies();
+		cookieStore.set("token", token, {
+			secure: process.env.NODE_ENV === "production"
+		});
 
-// 		cookieStore.set("token", token, {
-// 			secure: process.env.NODE_ENV === "production"
-// 		});
+		 const plainUser = user.toObject()
 
-// 		 const plainUser = user.toObject()
+		return {
+			success: true,
+			 isAdmin: user.isAdmin,  // ✅ return isAdmin flag
+      		accountNumber: plainUser.accountNumber,
+      		accountBalance: plainUser.accountBalance
 
-// 		return {
-// 			success: true,
-// 			 isAdmin: user.isAdmin,  // ✅ return isAdmin flag
-//       		accountNumber: plainUser.accountNumber,
-//       		accountBalance: plainUser.accountBalance
-
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 		return {
-// 			success: false
-// 		}
-// 	}
-// }
-
-
-
-
-
-
-export async function loginAction({ email, password }: { email: string; password: string }) {
-  await dbConnect();
-
-  const user = await UserModel.findOne({ email });
-  if (!user) return { success: false, message: "User not found" };
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return { success: false, message: "Invalid credentials" };
-
-  // Create JWT payload
-  const payload = {
-    id: user._id,
-    email: user.email,
-    isAdmin: user.isAdmin,
-  };
-
-  // Sign JWT
-  const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "7d" });
-
-  // Store in HttpOnly cookie
-  (await cookies()).set("auth_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-    path: "/",
-  });
-
-  return { success: true, isAdmin: user.isAdmin };
+		}
+	} catch (error) {
+		console.log(error);
+		return {
+			success: false
+		}
+	}
 }
+
+
+
+
+
+
+// export async function loginAction({ email, password }: { email: string; password: string }) {
+//   await dbConnect();
+
+//   const user = await UserModel.findOne({ email });
+//   if (!user) return { success: false, message: "User not found" };
+
+//   const isMatch = await bcrypt.compare(password, user.password);
+//   if (!isMatch) return { success: false, message: "Invalid credentials" };
+
+//   // Create JWT payload
+//   const payload = {
+//     id: user._id,
+//     email: user.email,
+//     isAdmin: user.isAdmin,
+//   };
+
+//   // Sign JWT
+//   const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "7d" });
+
+//   // Store in HttpOnly cookie
+//   (await cookies()).set("auth_token", token, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     maxAge: 60 * 60 * 24 * 7, // 7 days
+//     path: "/",
+//   });
+
+//   return { success: true, isAdmin: user.isAdmin };
+// }
 
 
 export const logout = async () => {
@@ -156,6 +155,7 @@ export const verifyUser = async () => {
 }
 
 export const getUserWithId = async (id: string) => {
+	await dbConnect()
 	const user = await UserModel.findById(id).lean();
 
 	return user;

@@ -1,6 +1,10 @@
 import ProductModel from "@/app/models/Product"
+import { getCurrentUser } from "@/lib/auth"
 import dbConnect from "@/lib/dbconnect"
+import { verifyUser } from "@/lib/user-action"
 import { Metadata } from "next"
+import Image from "next/image"
+import { redirect } from "next/navigation"
 
 export const dynamic = "force-dynamic"
 
@@ -11,6 +15,15 @@ export const metadata: Metadata = {
 
 const Page = async () => {
   await dbConnect()
+  const user = await getCurrentUser();
+      if (!user || !user.isAdmin) {
+        console.log("no user found");
+        redirect("/login");
+      }
+  // const auth = await verifyUser()
+  //   if (!auth.success) {
+  //     redirect("/login")
+  //   }
   const products = await ProductModel.find().lean()
 
   return (
@@ -31,6 +44,8 @@ const Page = async () => {
                 <img
                   src={product.image}
                   alt={product.title}
+                  width={400}
+                  height={400}
                   className="object-cover h-full w-full"
                 />
               ) : (
@@ -58,9 +73,9 @@ const Page = async () => {
 
             {/* Brand CTA */}
             <div className="p-4 border-t flex justify-center">
-              <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition">
+              {/* <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full text-sm font-medium transition">
                 Add to Cart
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

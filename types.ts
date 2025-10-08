@@ -4,6 +4,7 @@ export type Product = {
 	description: string
 	image: string
 	id: number
+	size: number
 	title: string
 	rating: {
 		count: number

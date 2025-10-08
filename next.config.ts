@@ -1,7 +1,24 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+const config: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fashionhubwebsite.netlify.app',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
+       {
+        protocol: 'https',
+        hostname: 'www.cartcontrollers.com',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
+    ],
+  },
+}
 
-export default nextConfig;
+export default config

@@ -12,6 +12,7 @@ export const GET = async () => {
 export const POST = async (request: Request, response: Response) => {
   try {
     await dbConnect();
+    
     const body = await request.json();
     const { title, description, price, size, user } = body;
     const Products = await ProductModel.create({

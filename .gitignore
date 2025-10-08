@@ -35,6 +35,11 @@ yarn-error.log*
 
 # vercel
 .vercel
+.auth.ts
+.middleware.ts
+.env.local
+.api
+
 
 # typescript
 *.tsbuildinfo

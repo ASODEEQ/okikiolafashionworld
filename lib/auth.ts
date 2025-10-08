@@ -1,17 +1,18 @@
 import { cookies } from "next/headers";
-// import jwt from "jsonwebtoken";
 import dbConnect from "./dbconnect";
 import UserModel from "@/app/models/User";
-import jwt from "jsonwebtoken"
+import { jwtVerify } from "jose";
 
 export async function getCurrentUser() {
-  const token = (await cookies()).get("auth_token")?.value;
-  if (!token) return null;
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+    const token = (await cookies()).get("token")?.value; // ✅ match the name used in signin
+    if (!token) return null;
+
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+    const { payload } = await jwtVerify(token, secret);
+
     await dbConnect();
-    const user = await UserModel.findById(decoded.id).lean();
+    const user = await UserModel.findById(payload.id).lean();
     if (!user) return null;
 
     return {
@@ -25,6 +26,7 @@ export async function getCurrentUser() {
       isAdmin: user.isAdmin,
     };
   } catch (err) {
+    console.error("❌ getCurrentUser error:", err);
     return null;
   }
 }

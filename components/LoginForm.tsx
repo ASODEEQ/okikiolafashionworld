@@ -17,12 +17,12 @@ const LoginForm = () => {
       if(updateP.isAdmin){
         router.push("/adminadd")
       }else{
-
         router.push("/userdashboard");
       }
     }
     else{
       alert(updateP.message || "❌ Login failed")
+
     }
   };
 
@@ -46,11 +46,11 @@ const LoginForm = () => {
             OkikiolaFashionWorld
           </h1>
           <p className="text-sm text-gray-500">
-            Step into style – Sign in to your fashion hub
+            Step into style – Sign in to Okikiola Fashion World
           </p>
         </div>
 
-        {/* Input Fields */}
+   
         <div className="flex flex-col gap-4">
           <input
             value={userForm.email}
@@ -71,7 +71,7 @@ const LoginForm = () => {
             className="rounded-xl border border-gray-300 outline-none px-3 text-sm h-12 focus:border-pink-500 focus:ring-1 focus:ring-pink-400"
           />
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
             className="h-12 rounded-xl bg-pink-600 hover:bg-pink-700 transition font-medium text-white shadow-md"
@@ -80,7 +80,7 @@ const LoginForm = () => {
           </button>
         </div>
 
-        {/* Footer Links */}
+      
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>
             Don’t have an account?{" "}

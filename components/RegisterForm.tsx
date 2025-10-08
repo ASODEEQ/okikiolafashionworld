@@ -1,7 +1,5 @@
 "use client";
 import { registerUser } from "@/lib/user-action";
-// import { registerUser } from "@/lib/user-action";
-// import { registerUser } from "../lib/user-action";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 

@@ -2,6 +2,7 @@
 "use client"
 
 import { deleteProduct } from "@/lib/products-action"
+import Image from "next/image"
 import Link from "next/link"
 
 export default function ProductList({ products }: { products: any[] }) {
@@ -9,7 +10,7 @@ export default function ProductList({ products }: { products: any[] }) {
     const res = await deleteProduct(id)
     if (res.success) {
       alert("✅ Deleted")
-      window.location.reload() // refresh list
+      window.location.reload()
     }
   }
 
@@ -30,6 +31,8 @@ export default function ProductList({ products }: { products: any[] }) {
               <img
                 src={product.image}
                 alt={product.title}
+                // width={400}
+                // height={400}
                 className="h-40 w-full object-cover"
               />
             )}

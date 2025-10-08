@@ -14,11 +14,10 @@ interface UserData {
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserData | null>(null);
-
+ 
   useEffect(() => {
     async function fetchUser() {
       const res = await fetch("/api/me");
-      
       if (res.ok) {
         const data = await res.json();
         setUser(data);
@@ -35,7 +34,7 @@ export default function ProfilePage() {
         <h1 className="text-3xl font-bold text-pink-600 mb-6">My Profile</h1>
 
         <div className="flex items-center space-x-6 mb-8">
-          <Image
+          <img
             src={user.image || "/default-avatar.png"}
             alt={user.name}
             className="w-24 h-24 rounded-full border-4 border-pink-300 object-cover"
