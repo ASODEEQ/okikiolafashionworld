@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbconnect";
 import ProductModel from "@/app/models/Product";
-
 export const dynamic = "force-static";
 export const GET = async () => {
   await dbConnect();
@@ -22,6 +21,7 @@ export const POST = async (request: Request, response: Response) => {
       size,
       user,
     });
+    console.log(response)
     return Response.json({ success: true, Products });
   } catch (error) {
     console.log(error);
@@ -36,5 +36,7 @@ export const DELETE = async ({ id }: { id: string }) => {
   try {
     await dbConnect();
     await ProductModel.findByIdAndDelete(id);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };

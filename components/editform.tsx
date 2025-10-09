@@ -4,7 +4,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { updateProduct } from "@/lib/products-action";
-import Image from "next/image";
+
 
 interface IProduct {
   _id: string;

@@ -1,9 +1,9 @@
 import ProductModel from "@/app/models/Product"
 import { getCurrentUser } from "@/lib/auth"
 import dbConnect from "@/lib/dbconnect"
-import { verifyUser } from "@/lib/user-action"
+
 import { Metadata } from "next"
-import Image from "next/image"
+
 import { redirect } from "next/navigation"
 
 export const dynamic = "force-dynamic"

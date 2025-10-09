@@ -25,10 +25,10 @@ export type Product = {
 // }
 
 
-type ProductV2 = Product & {
-	discount: number,
-	warranty: number
-}
+// type ProductV2 = Product & {
+// 	discount: number,
+// 	warranty: number
+// }
 // interface ProductV2 extends Product {
 // 	discount: number,
 // 	warranty: number

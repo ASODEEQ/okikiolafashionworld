@@ -14,12 +14,12 @@ export default async function EditProductPage({
   params: { id: string };
 }) {
   await dbConnect();
-  const product = await ProductModel.findById(params.id).lean();
+  const { id } = await params;
+  const product = await ProductModel.findById(id).lean();
   if (!product) {
-    redirect("/adminadd/products"); 
+    redirect("/adminadd/products");
   }
 
- 
   const safeProduct = {
     ...product,
     _id: product._id.toString(),
@@ -27,5 +27,3 @@ export default async function EditProductPage({
 
   return <EditProductForm product={safeProduct} />;
 }
-
-

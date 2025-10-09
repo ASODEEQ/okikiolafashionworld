@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Image from "next/image";
+
 
 export default async function UserDashboard() {
   const user = await getCurrentUser();

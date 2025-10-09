@@ -2,7 +2,7 @@
 import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
 import { generateReceipt } from "@/lib/receipt";
-import Image from "next/image";
+
 
 export default function CheckoutPage() {
   const { cart, removeFromCart, clearCart } = useCart();

@@ -3,7 +3,7 @@ import { PDFDocument, rgb, StandardFonts, degrees } from "pdf-lib";
 export async function generateReceipt(order: any) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 900]); // tall page
-  const { width, height } = page.getSize();
+  const {  height } = page.getSize();
 
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const fontNormal = await pdfDoc.embedFont(StandardFonts.Helvetica);

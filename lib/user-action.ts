@@ -4,7 +4,7 @@ import UserModel from "../app/models/User";
 import dbConnect from "./dbconnect";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken"
+
 import { jwtVerify, SignJWT } from "jose";
 
 const encodedSecret = new TextEncoder().encode(process.env.JWT_SECRET!)

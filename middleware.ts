@@ -6,7 +6,7 @@ export async function middleware (request: NextRequest) {
 	const token = request.cookies.get('token')?.value;
 
 	if (!token) {
-		return NextResponse.redirect(new URL('/signin', request.url))
+		return NextResponse.redirect(new URL('/login', request.url))
 	}
 
 	// const payload = jwt.verify(token, process.env.JWT_SECRET!);
@@ -25,7 +25,7 @@ export async function middleware (request: NextRequest) {
 		}
 	} catch (error) {
 		console.log(error);
-		return NextResponse.redirect(new URL('/signin', request.url))
+		return NextResponse.redirect(new URL('/login', request.url))
 	}
 
 }

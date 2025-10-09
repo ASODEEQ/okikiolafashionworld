@@ -1,6 +1,6 @@
 "use client";
 import { addProduct } from "@/lib/products-action";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 

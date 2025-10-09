@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+
 import { useEffect, useState } from "react";
 
 interface UserData {
@@ -17,7 +17,7 @@ export default function ProfilePage() {
  
   useEffect(() => {
     async function fetchUser() {
-      const res = await fetch("/api/me");
+      const res = await fetch("/profile");
       if (res.ok) {
         const data = await res.json();
         setUser(data);
