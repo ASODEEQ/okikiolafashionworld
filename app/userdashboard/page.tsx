@@ -28,8 +28,7 @@ export default async function UserDashboard() {
           </div> */}
           <div>
             <h2 className="text-xl font-bold text-pink-700">
-              {user.firstName}
-               {/* {user.lastName} */}
+               <p className="text-sm text-gray-600">Welcome, dear customer {user.firstName}  {user.lastName} </p>
             </h2>
             <p className="text-gray-500">{user.email}</p>
           </div>
@@ -37,7 +36,7 @@ export default async function UserDashboard() {
 
         {/* Account Info */}
         <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
-          <p className="text-sm text-gray-600">MEMBER Number</p>
+          <p className="text-sm text-gray-600">Member Number</p>
           <p className="text-lg font-semibold">{user.accountNumber}</p>
           {/* <p className="text-sm text-gray-600 mt-2">Account Balance</p> */}
           <p className="text-lg font-bold text-pink-700">

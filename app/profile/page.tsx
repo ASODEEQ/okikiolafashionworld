@@ -14,13 +14,13 @@ const Page = async () => {
       <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md text-center border border-pink-100">
         {/* Profile Image */}
         <div className="flex flex-col items-center mb-6">
-          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-pink-400 shadow-md">
+          {/* <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-pink-400 shadow-md">
             <img
               src={user.profileImage || "/default-avatar.png"}
               alt={user.firstName}
               className="object-cover"
             />
-          </div>
+          </div> */}
           <h2 className="text-2xl font-bold text-pink-700 mt-4">
             {user.firstName} {user.lastName}
           </h2>
@@ -40,14 +40,14 @@ const Page = async () => {
           </div>
 
           <div className="flex justify-between border-b pb-2">
-            <span className="text-gray-600 font-medium">Account No:</span>
+            <span className="text-gray-600 font-medium">Member No:</span>
             <span className="text-gray-800">{user.accountNumber}</span>
           </div>
 
           <div className="flex justify-between border-b pb-2">
-            <span className="text-gray-600 font-medium">Balance:</span>
+            {/* <span className="text-gray-600 font-medium">Balance:</span> */}
             <span className="text-green-600 font-semibold">
-              ₦{user.accountBalance?.toLocaleString()}
+              {/* ₦{user.accountBalance?.toLocaleString()} */}
             </span>
           </div>
         </div>

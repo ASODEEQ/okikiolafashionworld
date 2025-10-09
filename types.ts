@@ -48,3 +48,16 @@ export interface UpdateProduct {
 		image?: string,
 		size?: string,
 }
+
+export interface IUser extends Document {
+	firstName: string,
+	lastName: string,
+	email: string,
+	phoneNumber?: string,
+	profileImage: string,
+	// accountNumber: string,
+	password: string,
+	isAdmin: boolean,
+	accountNumber: string,
+	accountBalance: number
+}
