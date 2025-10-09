@@ -12,10 +12,10 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const user = await getCurrentUser();
-      if (!user || user.isAdmin) {
-        console.log("no user found");
-        redirect("/login");
-      }
+  if (!user || user.isAdmin) {
+    console.log("no user found");
+    redirect("/login");
+  }
   await dbConnect();
   const products = await ProductModel.find({}).lean();
 

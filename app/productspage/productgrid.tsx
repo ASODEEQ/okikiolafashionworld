@@ -92,9 +92,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
               <p className="text-pink-600 font-bold mt-2">
                 ₦{product.price.toLocaleString()}
               </p>
-              <p className="text-sm text-gray-500 mb-3">
-                Size: {product.size}
-              </p>
+              <p className="text-sm text-gray-500 mb-3">Size: {product.size}</p>
 
               <div className="flex gap-2">
                 <button
