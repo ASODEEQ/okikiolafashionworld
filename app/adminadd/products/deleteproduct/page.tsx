@@ -5,6 +5,8 @@ import { getCurrentUser } from "@/lib/auth";
 import dbConnect from "@/lib/dbconnect";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   await dbConnect();
   const user = await getCurrentUser();

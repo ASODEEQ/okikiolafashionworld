@@ -1,5 +1,6 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from "pdf-lib";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function generateReceipt(order: any) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 900]); // tall page

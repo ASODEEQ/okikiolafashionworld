@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 // import ProductGrid from "./ProductGrid";
 // import ProductGrid from "./ProductGrid"; // client component
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const user = await getCurrentUser();
   if (!user || user.isAdmin) {

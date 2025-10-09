@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
 
 export default async function UserDashboard() {
   const user = await getCurrentUser();
@@ -22,7 +23,6 @@ export default async function UserDashboard() {
               // height={100}
               alt="Profile"
               sizes="64px"
-  
               className="rounded-full border border-pink-300 object-cover"
             />
           </div>
