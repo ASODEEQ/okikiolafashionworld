@@ -1,27 +1,26 @@
-import dbConnect from "@/lib/dbconnect";
-import ProductModel from "@/app/models/Product";
-import { notFound } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth";
-import ProductDetailClient from "./ProductDetailClient";
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  await dbConnect();
+import ProductModel from "@/app/models/Product";
+import ProductClientPage from "./ProductDetailClient";
+
+
+export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await ProductModel.findById(params.id).lean();
 
-  if (!product) notFound();
+  if (!product) {
+    return <div className="text-center mt-20 text-lg">❌ Product not found</div>;
+  }
 
-  const safeProduct = {
-    ...product,
-    _id: product._id.toString(),
-  };
-
-  const user = await getCurrentUser();
+  const similar = await ProductModel.find({
+    category: product.category,
+    _id: { $ne: product._id },
+    status: "active",
+  }).lean();
 
   return (
-    <ProductDetailClient product={safeProduct} user={user} />
+    <ProductClientPage
+      product={JSON.parse(JSON.stringify(product))}
+      similar={JSON.parse(JSON.stringify(similar))}
+      user={null}
+    />
   );
 }

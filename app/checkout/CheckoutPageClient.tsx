@@ -3,9 +3,7 @@ import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
 import { generateReceipt } from "@/lib/receipt";
 
-
 export default function CheckoutPage() {
-
   const { cart, removeFromCart, clearCart } = useCart();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -18,28 +16,28 @@ export default function CheckoutPage() {
       total,
     };
 
-    // Save order for receipt page (optional)
+    // Save order for receipt page
     localStorage.setItem("lastOrder", JSON.stringify(order));
 
     try {
+      // 1️⃣ Update DB inventory
+      await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart }),
+      });
+
+      // 2️⃣ Generate receipt
       const pdfBytes = await generateReceipt(order);
+    //   const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const blob = new Blob([new Uint8Array(pdfBytes)], { type: "application/pdf" });
 
-      // ✅ Ensure standard ArrayBuffer to avoid Blob type issues
-      const byteArray = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes as ArrayBuffer);
-      const normalArray = new Uint8Array(byteArray.length);
-      normalArray.set(byteArray);
-
-      // ✅ Create Blob safely
-      const blob = new Blob([normalArray], { type: "application/pdf" });
-
-      // ✅ Open PDF in new tab
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
     } catch (err) {
       console.error("Error generating PDF:", err);
     }
 
-    // Clear cart after purchase
     clearCart();
   };
 
@@ -50,9 +48,7 @@ export default function CheckoutPage() {
         <Link href="/productspage" className="text-pink-600 underline">
           Go shopping
         </Link>
-       
       </div>
-      
     );
 
   return (
@@ -65,13 +61,7 @@ export default function CheckoutPage() {
             className="flex justify-between items-center border-b pb-2"
           >
             <div className="flex items-center gap-3">
-              <img
-                src={item.image}
-                alt={item.title}
-                // width={400}
-                // height={400}
-                className="w-16 h-16 object-cover"
-              />
+              <img src={item.image} alt={item.title} className="w-16 h-16 object-cover" />
               <div>
                 <h2 className="font-semibold">{item.title}</h2>
                 <p className="text-sm text-gray-500">
@@ -102,8 +92,8 @@ export default function CheckoutPage() {
         >
           Confirm Purchase
         </button>
-         <Link href="/productspage" className="text-pink-600 underline">
-          continue shopping
+        <Link href="/productspage" className="ml-3 text-pink-600 underline">
+          Continue shopping
         </Link>
       </div>
     </div>

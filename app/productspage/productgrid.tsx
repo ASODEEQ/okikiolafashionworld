@@ -2,8 +2,7 @@
 import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
 import { useState } from "react";
-import { ShoppingCart, User } from "lucide-react";
-import { Facebook, Instagram } from "lucide-react";
+import { ShoppingCart, User, Facebook, Instagram } from "lucide-react";
 
 interface Product {
   _id: string;
@@ -28,6 +27,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
   const indexOfLast = currentPage * productsPerPage;
   const indexOfFirst = indexOfLast - productsPerPage;
 
+  // Filter logic
   const filtered = products.filter((product) => {
     return (
       (search === "" ||
@@ -42,20 +42,20 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Glass Header */}
+      {/* Header */}
       <header className="backdrop-blur-md bg-white/30 sticky top-0 z-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-8 py-4">
           <nav className="flex items-center gap-6 font-medium">
-            <Link href="/" className="hover:text-pink-600 transition">
+            <Link href="/" className="hover:text-pink-600 transition text-pink-600">
               Home
             </Link>
-            <Link href="/about" className="hover:text-pink-600 transition">
-              About Us
+            <Link href="/about" className="hover:text-pink-600 transition text-pink-600">
+              About
             </Link>
-            <Link href="/contact" className="hover:text-pink-600 transition">
+            <Link href="/contact" className="hover:text-pink-600 transition text-pink-600">
               Contact
             </Link>
-            <Link href="/address" className="hover:text-pink-600 transition">
+            <Link href="/address" className="hover:text-pink-600 transition text-pink-600">
               Address
             </Link>
           </nav>
@@ -63,14 +63,11 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           <div className="flex items-center gap-5">
             <Link
               href="/profile"
-              className="flex items-center gap-1 hover:text-pink-600 transition"
+              className="flex items-center gap-1 hover:text-pink-600 transition text-pink-600"
             >
               <User size={20} /> Profile
             </Link>
-            <Link
-              href="/checkout"
-              className="relative hover:text-pink-600 transition"
-            >
+            <Link href="/checkout" className="relative hover:text-pink-600 transition">
               <ShoppingCart size={26} />
               {cart.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full px-2">
@@ -89,12 +86,18 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             type="text"
             placeholder="Search products..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
             className="border border-gray-300 p-2 rounded-lg w-56 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white"
           />
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setCurrentPage(1);
+            }}
             className="border border-gray-300 p-2 rounded-lg bg-white"
           >
             <option value="">All Categories</option>
@@ -105,7 +108,10 @@ export default function ProductGrid({ products }: { products: Product[] }) {
           </select>
           <select
             value={size}
-            onChange={(e) => setSize(e.target.value)}
+            onChange={(e) => {
+              setSize(e.target.value);
+              setCurrentPage(1);
+            }}
             className="border border-gray-300 p-2 rounded-lg bg-white"
           >
             <option value="">All Sizes</option>
@@ -118,50 +124,57 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
       {/* Products Grid */}
       <div className="max-w-7xl mx-auto p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-        {currentProducts.map((product) => (
-          <div
-            key={product._id}
-            className="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:-translate-y-2 hover:shadow-2xl w-full"
-          >
-            <Link href={`/product/${product._id}`} className="block group">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-80 object-cover"
-              />
-              <div className="p-6">
-                <h2 className="text-2xl font-semibold group-hover:text-pink-600 transition">
-                  {product.title}
-                </h2>
-                <p className="text-sm mt-2 line-clamp-2">{product.description}</p>
-                <div className="mt-4 flex justify-between items-center">
-                  <p className="text-pink-600 font-bold text-lg">
-                    ₦{product.price.toLocaleString()}
-                  </p>
-                  <p className="text-sm">Size: {product.size}</p>
+        {currentProducts.length > 0 ? (
+          currentProducts.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:-translate-y-2 hover:shadow-2xl w-full"
+            >
+              <Link href={`/product/${product._id}`} className="block group">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-80 object-cover"
+                />
+                <div className="p-6">
+                  <h2 className="text-2xl font-semibold group-hover:text-pink-600 transition">
+                    {product.title}
+                  </h2>
+                  <p className="text-sm mt-2 line-clamp-2">{product.description}</p>
+                  <div className="mt-4 flex justify-between items-center">
+                    <p className="text-pink-600 font-bold text-lg">
+                      ₦{product.price.toLocaleString()}
+                    </p>
+                    <p className="text-sm">Size: {product.size}</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-
-            <div className="flex gap-3 px-6 pb-6">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  addToCart({ ...product, quantity: product.quantity ?? 1 });
-                }}
-                className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition w-1/2"
-              >
-                Add to Cart
-              </button>
-              <Link
-                href="/checkout"
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition w-1/2 text-center"
-              >
-                Buy Now
               </Link>
+
+              <div className="flex gap-3 px-6 pb-6">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({ ...product, quantity: product.quantity ?? 1 });
+                  }}
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition w-1/2"
+                >
+                  Add to Cart
+                </button>
+                <Link
+                  href="/checkout"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition w-1/2 text-center"
+                >
+                  Buy Now
+                </Link>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-16 text-gray-600">
+            <h2 className="text-2xl font-semibold mb-2">No products found</h2>
+            <p>Try adjusting your search or filters.</p>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Pagination */}
@@ -169,10 +182,10 @@ export default function ProductGrid({ products }: { products: Product[] }) {
         <div className="flex justify-center items-center mt-10 gap-3">
           <button
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
             className={`px-4 py-2 rounded-lg ${
               currentPage === 1
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-gray-300 text-black-500 cursor-not-allowed"
                 : "bg-pink-600 text-white hover:bg-pink-700"
             }`}
           >
@@ -185,10 +198,10 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
           <button
             disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
             className={`px-4 py-2 rounded-lg ${
               currentPage === totalPages
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                ? "bg-gray-300 text-black-500 cursor-not-allowed"
                 : "bg-pink-600 text-white hover:bg-pink-700"
             }`}
           >
@@ -205,7 +218,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             <p className="text-sm">
               Building style, confidence, and trust.
               <br />
-              123 Fashion Street, Ibadan, Nigeria
+              No:50 , Akintunde House, Odi-Olowo, Osogbo
             </p>
           </div>
 
@@ -213,7 +226,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link href="/" className="hover:underline">Home</Link></li>
-              <li><Link href="/about" className="hover:underline">About Us</Link></li>
+              <li><Link href="/about" className="hover:underline">About</Link></li>
               <li><Link href="/contact" className="hover:underline">Contact</Link></li>
               <li><Link href="/address" className="hover:underline">Address</Link></li>
             </ul>
