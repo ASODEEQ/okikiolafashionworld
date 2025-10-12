@@ -2,8 +2,7 @@
 import dbConnect from "@/lib/dbconnect";
 import ProductModel from "@/app/models/Product";
 import ProductGrid from "./productgrid";
-import { getCurrentUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
+
 // import ProductGrid from "./ProductGrid";
 // import ProductGrid from "..productspage/ProductGrid";
 
@@ -13,11 +12,11 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const user = await getCurrentUser();
-  if (!user || user.isAdmin) {
-    console.log("no user found");
-    redirect("/login");
-  }
+  // const user = await getCurrentUser();
+  // if (!user || user.isAdmin) {
+  //   console.log("no user found");
+  //   redirect("/login");
+  // }
   await dbConnect();
   const products = await ProductModel.find({}).lean();
 
