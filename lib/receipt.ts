@@ -19,7 +19,7 @@ export async function generateReceipt(order: any) {
   });
 
   // --- Brand watermark lightly ---
-  page.drawText("Okikiola FashionWorld", {
+  page.drawText("Okiki FashionWorld", {
     x: 50,
     y: height / 2,
     size: 60,
@@ -97,7 +97,7 @@ export async function generateReceipt(order: any) {
 
     // Subtotal
     page.drawText(
-      `NGN ${(item.price * item.quantity).toLocaleString()}`,
+      `# ${(item.price * item.quantity).toLocaleString()}`,
       {
         x: 520,
         y,
@@ -110,7 +110,7 @@ export async function generateReceipt(order: any) {
   }
 
   // --- Total ---
-  page.drawText(`TOTAL: NGN ${order.total.toLocaleString()}`, {
+  page.drawText(`TOTAL: # ${order.total.toLocaleString()}`, {
     x: 50,
     y: y - 20,
     size: 16,

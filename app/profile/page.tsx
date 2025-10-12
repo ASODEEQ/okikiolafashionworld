@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"; // ✅ import this
 import { getUserWithId, logout, verifyUser } from "@/lib/user-action";
 import { redirect } from "next/navigation";
 
@@ -14,13 +15,6 @@ const Page = async () => {
       <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md text-center border border-pink-100">
         {/* Profile Image */}
         <div className="flex flex-col items-center mb-6">
-          {/* <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-pink-400 shadow-md">
-            <img
-              src={user.profileImage || "/default-avatar.png"}
-              alt={user.firstName}
-              className="object-cover"
-            />
-          </div> */}
           <h2 className="text-2xl font-bold text-pink-700 mt-4">
             {user.firstName} {user.lastName}
           </h2>
@@ -43,20 +37,21 @@ const Page = async () => {
             <span className="text-gray-600 font-medium">Member No:</span>
             <span className="text-gray-800">{user.accountNumber}</span>
           </div>
-
-          <div className="flex justify-between border-b pb-2">
-            {/* <span className="text-gray-600 font-medium">Balance:</span> */}
-            <span className="text-green-600 font-semibold">
-              {/* ₦{user.accountBalance?.toLocaleString()} */}
-            </span>
-          </div>
         </div>
 
+        {/* Go to Products Button */}
+        <Link
+          href="/productspage "
+          className="block w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-transform duration-200 hover:scale-105 shadow-md"
+        >
+          🛍️ Go to Products
+        </Link>
+
         {/* Logout Button */}
-        <form action={logout} className="mt-8">
+        <form action={logout} className="mt-4">
           <button
             type="submit"
-            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 rounded-xl transition-transform duration-200 hover:scale-105 shadow-md"
+            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-xl transition-transform duration-200 hover:scale-105 shadow-md"
           >
             Logout
           </button>

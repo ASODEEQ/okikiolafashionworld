@@ -19,8 +19,6 @@ export default async function UserDashboard() {
           {/* <div className="relative w-16 h-16">
             <img
               src={user?.profileImage || "/default-avatar.png"}
-              // width={100}
-              // height={100}
               alt="Profile"
               sizes="64px"
               className="rounded-full border border-pink-300 object-cover"
@@ -28,17 +26,21 @@ export default async function UserDashboard() {
           </div> */}
           <div>
             <h2 className="text-xl font-bold text-pink-700">
-               <p className="text-sm text-gray-600">Welcome, dear customer {user.firstName}  {user.lastName} </p>
+              <p className="text-sm text-black">
+                Welcome, dear customer [{user.firstName} {user.lastName}]
+              </p>
             </h2>
-            <p className="text-gray-500">{user.email}</p>
+            <p className="text-black">{user.email}</p>
           </div>
         </div>
 
         {/* Account Info */}
         <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
-          <p className="text-sm text-gray-600">Member Number</p>
-          <p className="text-lg font-semibold">{user.accountNumber}</p>
-          {/* <p className="text-sm text-gray-600 mt-2">Account Balance</p> */}
+          <p className="text-sm text-black">Member Number</p>
+          <p className="text-lg font-semibold text-black">
+            {user.accountNumber}
+          </p>
+          {/* <p className="text-sm text-black mt-2">Account Balance</p> */}
           <p className="text-lg font-bold text-pink-700">
             {/* ₦{user.accountBalance?.toLocaleString()} */}
           </p>
@@ -52,15 +54,15 @@ export default async function UserDashboard() {
           >
             Browse Products
           </a>
-          {/* <a
-            href="/transactions"
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200"
+          <a
+            href="/checkout"
+            className="px-4 py-2 bg-black text-white rounded-lg shadow hover:bg-pink-700"
           >
-            View Transactions
-          </a> */}
+            View Cart
+          </a>
           <a
             href="/profile"
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200"
+            className="px-4 py-2 bg-black text-white rounded-lg shadow hover:bg-pink-700"
           >
             My Profile
           </a>
