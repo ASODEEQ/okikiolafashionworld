@@ -104,6 +104,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             <option value="clothes">Clothes</option>
             <option value="bags">Bags</option>
             <option value="shoes">Shoes</option>
+              <option value="watch">Watch</option>
             <option value="gadgets">Gadgets</option>
           </select>
           <select

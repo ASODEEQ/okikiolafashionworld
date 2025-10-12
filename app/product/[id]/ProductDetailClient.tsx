@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 
 interface Product {
   _id: string;
@@ -16,16 +17,31 @@ interface Product {
 
 interface ProductClientPageProps {
   product: Product;
-  similar: Product[]; // ✅ added
+  similar: Product[];
   user: any;
 }
 
 export default function ProductClientPage({ product, similar }: ProductClientPageProps) {
+  const router = useRouter();
+
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-5xl mx-auto">
+      {/* 🔙 Back button */}
+      <button
+        onClick={() => router.push("/productspage")}
+        className="mb-6 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
+      >
+        ← Back to Products
+      </button>
+
+      {/* Product Details */}
       <div className="grid md:grid-cols-2 gap-8">
         <div>
-          <img src={product.image} alt={product.title} className="rounded-lg shadow-md" />
+          <img
+            src={product.image}
+            alt={product.title}
+            className="rounded-lg shadow-md w-full h-96 object-cover"
+          />
         </div>
 
         <div>
@@ -37,12 +53,17 @@ export default function ProductClientPage({ product, similar }: ProductClientPag
         </div>
       </div>
 
+      {/* 🔁 Similar Products */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-4">Similar Products</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {similar?.length ? (
             similar.map((item) => (
-              <div key={item._id} className="border rounded-lg p-3 hover:shadow-md transition">
+              <div
+                key={item._id}
+                onClick={() => router.push(`/products/${item._id}`)}
+                className="border rounded-lg p-3 hover:shadow-lg cursor-pointer transition"
+              >
                 <img
                   src={item.image}
                   alt={item.title}
@@ -53,7 +74,7 @@ export default function ProductClientPage({ product, similar }: ProductClientPag
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No similar products available</p>
+            <p className="text-gray-500">OKW</p>
           )}
         </div>
       </div>

@@ -12,21 +12,26 @@ const RegisterForm = () => {
     phoneNumber: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const registerUserHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const updateP = await registerUser(userForm);
-    if (updateP.success) {
+    setLoading(true);
+
+    const res = await registerUser(userForm);
+    setLoading(false);
+
+    if (res.success) {
+      alert(`✅ Welcome ${userForm.firstName}! Check your email to login.`);
       router.push("/login");
+    } else {
+      alert(`❌ Registration failed || "Try again"}`);
     }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserForm((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+    setUserForm((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -35,7 +40,6 @@ const RegisterForm = () => {
         onSubmit={registerUserHandler}
         className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8"
       >
-        {/* Branding */}
         <h1 className="text-3xl font-bold text-center text-pink-700 tracking-wide">
           OkikiolaFashionWorld
         </h1>
@@ -43,78 +47,32 @@ const RegisterForm = () => {
           Create your account to explore latest trends
         </p>
 
-        {/* Form Fields */}
         <div className="flex flex-col mt-8 gap-5">
-          <div className="flex flex-col">
-            <label className="text-black text-sm mb-1">First Name</label>
-            <input
-              value={userForm.firstName}
-              onChange={handleInputChange}
-              name="firstName"
-              required
-              type="text"
-              className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
-            />
-          </div>
+          {["firstName","lastName","email","phoneNumber","password"].map((field) => (
+            <div key={field} className="flex flex-col">
+              <label className="text-black text-sm mb-1">{field === "firstName" ? "First Name" : field === "lastName" ? "Last Name" : field === "phoneNumber" ? "Phone Number" : field === "email" ? "Email Address" : "Password"}</label>
+              <input
+                value={userForm[field as keyof typeof userForm]}
+                onChange={handleInputChange}
+                name={field}
+                required={field !== "phoneNumber"}
+                type={field === "password" ? "password" : "text"}
+                className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
+              />
+            </div>
+          ))}
 
-          <div className="flex flex-col">
-            <label className="text-black text-sm mb-1">Last Name</label>
-            <input
-              value={userForm.lastName}
-              onChange={handleInputChange}
-              name="lastName"
-              required
-              type="text"
-              className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-black text-sm mb-1">Email Address</label>
-            <input
-              value={userForm.email}
-              onChange={handleInputChange}
-              name="email"
-              required
-              type="email"
-              className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-black text-sm mb-1">Phone Number</label>
-            <input
-              value={userForm.phoneNumber}
-              onChange={handleInputChange}
-              name="phoneNumber"
-              type="text"
-              className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-black text-sm mb-1">Password</label>
-            <input
-              value={userForm.password}
-              onChange={handleInputChange}
-              type="password"
-              name="password"
-              className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
-            />
-          </div>
-
-          <button className="h-12 rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white tracking-wide transition">
-            Register
+          <button
+            disabled={loading}
+            className="h-12 rounded-lg bg-pink-600 hover:bg-pink-700 font-semibold text-white tracking-wide transition"
+          >
+            {loading ? "Registering..." : "Register"}
           </button>
         </div>
 
-        {/* Login Redirect */}
         <p className="text-center text-sm text-black mt-6">
           Already have an account?{" "}
-          <a
-            href="/login"
-            className="text-pink-600 font-medium hover:underline"
-          >
+          <a href="/login" className="text-pink-600 font-medium hover:underline">
             Login
           </a>
         </p>

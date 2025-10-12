@@ -4,10 +4,20 @@ import UserModel from "../app/models/User";
 import dbConnect from "./dbconnect";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
+import nodemailer from "nodemailer";
 
 import { jwtVerify, SignJWT } from "jose";
 
 const encodedSecret = new TextEncoder().encode(process.env.JWT_SECRET!)
+// ✅ Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 export const registerUser = async (user: { firstName: string, lastName:string, email: string, phoneNumber: string, password: string,  }) => {
 	try {
@@ -21,6 +31,23 @@ export const registerUser = async (user: { firstName: string, lastName:string, e
 		}
 	const create =	await UserModel.create(user);
 	console.log(create);
+
+	// ✅ Send welcome email (non-blocking)
+  try {
+    await transporter.sendMail({
+      from: `"OkikiolaFashionWorld" <${process.env.SMTP_USER}>`,
+      to: user.email,
+      subject: "Welcome to OkikiolaFashionWorld!",
+      html: `
+        <h2>Hello ${user.firstName},</h2>
+        <p>Your account has been successfully created!</p>
+        <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/login" style="color:#e11d48;">Click here to login</a></p>
+        <p>Thank you for joining us!</p>
+      `,
+    });
+  } catch(emailError) {
+    console.error("Email sending failed:", emailError);
+  }
 
 		return {
 			success: true,
@@ -78,6 +105,23 @@ export const loginAction = async ({ email, password }: {  email: string, passwor
 
 		 const plainUser = user.toObject()
 
+		  // ✅ Send login notification email
+    try {
+      await transporter.sendMail({
+        from: `"OkikiolaFashionWorld" <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: "New Login Alert",
+        html: `
+          <h3>Hello ${user.firstName},</h3>
+          <p>You just logged in to your Okikiola Fashion World account.</p>
+          <p>If this wasn't you, please secure your account immediately.</p>
+          <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/login" style="color:#e11d48;">Click here to login again</a></p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Login email sending failed:", emailError);
+    }
+
 		return {
 			success: true,
 			 isAdmin: user.isAdmin,  // ✅ return isAdmin flag
@@ -97,36 +141,6 @@ export const loginAction = async ({ email, password }: {  email: string, passwor
 
 
 
-
-// export async function loginAction({ email, password }: { email: string; password: string }) {
-//   await dbConnect();
-
-//   const user = await UserModel.findOne({ email });
-//   if (!user) return { success: false, message: "User not found" };
-
-//   const isMatch = await bcrypt.compare(password, user.password);
-//   if (!isMatch) return { success: false, message: "Invalid credentials" };
-
-//   // Create JWT payload
-//   const payload = {
-//     id: user._id,
-//     email: user.email,
-//     isAdmin: user.isAdmin,
-//   };
-
-//   // Sign JWT
-//   const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "7d" });
-
-//   // Store in HttpOnly cookie
-//   (await cookies()).set("auth_token", token, {
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === "production",
-//     maxAge: 60 * 60 * 24 * 7, // 7 days
-//     path: "/",
-//   });
-
-//   return { success: true, isAdmin: user.isAdmin };
-// }
 
 
 export const logout = async () => {
