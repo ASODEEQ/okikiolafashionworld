@@ -174,7 +174,7 @@ export default function AdminProductList({ products }: { products: Product[] }) 
             <p className="text-sm text-gray-300">
               Building style, confidence, and trust.
               <br />
-              NO 50, akintunde house odi-olowo ,osogbo
+              NO 50, akintunde house odi-olowo, Osogbo
             </p>
           </div>
 
