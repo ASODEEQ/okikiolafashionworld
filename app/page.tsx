@@ -118,7 +118,7 @@ export default function LandingPage() {
               </li>
               <li>
                 <Link href="/about" className="hover:underline">
-                  About Us
+                  About
                 </Link>
               </li>
               <li>

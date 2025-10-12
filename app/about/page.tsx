@@ -44,7 +44,7 @@ export default function AboutPage() {
       {/* Main Content */}
       <main className="pt-28 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-pink-600 mb-6">About Us</h1>
+          <h1 className="text-4xl font-bold text-pink-600 mb-6">About</h1>
           <p className="text-lg leading-relaxed text-black mb-6">
             <strong>Okikiola Fashion World (OKW)</strong> is a global fashion brand
             that connects cultures through elegant designs and high-quality fashion

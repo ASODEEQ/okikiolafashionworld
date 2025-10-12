@@ -48,7 +48,7 @@ export default function AdminProductList({ products }: { products: Product[] }) 
               Home
             </Link>
             <Link href="/about" className="hover:text-pink-600 transition">
-              About Us
+              About
             </Link>
             <Link href="/contact" className="hover:text-pink-600 transition">
               Contact
@@ -174,7 +174,7 @@ export default function AdminProductList({ products }: { products: Product[] }) 
             <p className="text-sm text-gray-300">
               Building style, confidence, and trust.
               <br />
-              123 Fashion Street, Ibadan, Nigeria
+              NO 50, akintunde house odi-olowo ,osogbo
             </p>
           </div>
 
@@ -182,7 +182,7 @@ export default function AdminProductList({ products }: { products: Product[] }) 
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-gray-300">
               <li><Link href="/" className="hover:underline">Home</Link></li>
-              <li><Link href="/about" className="hover:underline">About Us</Link></li>
+              <li><Link href="/about" className="hover:underline">About</Link></li>
               <li><Link href="/contact" className="hover:underline">Contact</Link></li>
               <li><Link href="/address" className="hover:underline">Address</Link></li>
             </ul>
