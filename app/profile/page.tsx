@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link"; // ✅ import this
+import Link from "next/link"; 
 import { getUserWithId, logout, verifyUser } from "@/lib/user-action";
 import { redirect } from "next/navigation";
 
@@ -39,12 +39,12 @@ const Page = async () => {
           </div>
         </div>
 
-        {/* Go to Products Button */}
+        {/* Conditional Button */}
         <Link
-          href="/productspage "
+          href={user.isAdmin ? "/adminadd" : "/productspage"}
           className="block w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-transform duration-200 hover:scale-105 shadow-md"
         >
-          🛍️ Go to Products
+          {user.isAdmin ? "➕ Go to Add Product" : "🛍️ Go to Products"}
         </Link>
 
         {/* Logout Button */}
