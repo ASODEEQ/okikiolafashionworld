@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const apiKey = process.env.CLOUDINARY_API_KEY!;
     const apiSecret = process.env.CLOUDINARY_API_SECRET!;
 
-    // Create signature string
+    // Create signature string for signed upload
     const signatureString = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
     const signature = crypto
       .createHash("sha1")

@@ -1,9 +1,10 @@
 "use client";
+
 import { addProduct } from "@/lib/products-action";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 
-const AddProductForm = () => {
+const AddProductPage = () => {
   const router = useRouter();
   const [form, setForm] = useState({
     title: "",
@@ -27,7 +28,6 @@ const AddProductForm = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 📸 handle image file selection
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -36,7 +36,6 @@ const AddProductForm = () => {
     }
   };
 
-  // ☁️ Upload to Cloudinary (signed)
   const uploadImage = async () => {
     if (!file) return "";
     setLoading(true);
@@ -45,7 +44,9 @@ const AddProductForm = () => {
       const signRes = await fetch("/api/cloudinary/sign", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ folder: "okikiolafashionworld" }),
+        body: JSON.stringify({
+          folder: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_FOLDER,
+        }),
       });
 
       const { signature, timestamp, apiKey, cloudName, folder } =
@@ -119,16 +120,16 @@ const AddProductForm = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg bg-white shadow-2xl rounded-2xl p-8 border border-pink-200"
       >
+        {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-pink-600 tracking-wide">
             OkikiolaFashionWorld Admin
           </h1>
-          <p className="text-sm text-black">
-            Add new products to your catalog
-          </p>
+          <p className="text-sm text-black">Add new products to your catalog</p>
         </div>
 
         <div className="space-y-4">
+          {/* Product Title */}
           <div>
             <label className="block text-black font-semibold mb-1">
               Product Title
@@ -142,6 +143,7 @@ const AddProductForm = () => {
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block text-black font-semibold mb-1">
               Description
@@ -155,10 +157,9 @@ const AddProductForm = () => {
             />
           </div>
 
+          {/* Price */}
           <div>
-            <label className="block text-black font-semibold mb-1">
-              Price (₦)
-            </label>
+            <label className="block text-black font-semibold mb-1">Price (₦)</label>
             <input
               name="price"
               type="number"
@@ -169,10 +170,9 @@ const AddProductForm = () => {
             />
           </div>
 
+          {/* Quantity */}
           <div>
-            <label className="block text-black font-semibold mb-1">
-              Quantity
-            </label>
+            <label className="block text-black font-semibold mb-1">Quantity</label>
             <input
               name="quantity"
               type="number"
@@ -183,10 +183,9 @@ const AddProductForm = () => {
             />
           </div>
 
+          {/* Category */}
           <div>
-            <label className="block text-black font-semibold mb-1">
-              Category
-            </label>
+            <label className="block text-black font-semibold mb-1">Category</label>
             <input
               name="category"
               value={form.category}
@@ -196,10 +195,9 @@ const AddProductForm = () => {
             />
           </div>
 
+          {/* Image Upload */}
           <div>
-            <label className="block text-black font-semibold mb-1">
-              Upload Product Image
-            </label>
+            <label className="block text-black font-semibold mb-1">Upload Product Image</label>
             <input
               type="file"
               accept="image/*"
@@ -217,6 +215,7 @@ const AddProductForm = () => {
             )}
           </div>
 
+          {/* Size */}
           <div>
             <label className="block text-black font-semibold mb-1">
               Size (e.g. S, M, L, XL)
@@ -253,4 +252,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default AddProductPage;
