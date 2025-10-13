@@ -32,23 +32,26 @@ export const registerUser = async (user: { firstName: string, lastName:string, e
 	const create =	await UserModel.create(user);
 	console.log(create);
 
-	// ✅ Send welcome email (non-blocking)
-  try {
-    await transporter.sendMail({
-      from: `"OkikiolaFashionWorld" <${process.env.SMTP_USER}>`,
-      to: user.email,
-      subject: "Welcome to OkikiolaFashionWorld!",
-      html: `
-        <h2>Hello ${user.firstName},</h2>
-        <p>Your account has been successfully created!</p>
-        <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/login" style="color:#e11d48;">Click here to login</a></p>
-        <p>Thank you for joining us!</p>
-      `,
-    });
-  } catch(emailError) {
-    console.error("Email sending failed:", emailError);
-  }
+   // ✅ Send registration confirmation email
+    try {
+      await transporter.sendMail({
+        from: `"OkikiolaFashionWorld" <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: "Welcome to OkikiolaFashionWorld!",
+        html: `
+          <h3>Hello ${user.firstName},</h3>
+          <p>Thank you for registering at Okikiola Fashion World.</p>
+          <p>You can login using the following link:</p>
+          <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/login" style="color:#e11d48;">Login Here</a></p>
+          <p>Enjoy your shopping experience!</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Registration email failed:", emailError);
+    }
 
+
+  
 		return {
 			success: true,
 			message: "user registered successfully",
@@ -121,6 +124,9 @@ export const loginAction = async ({ email, password }: {  email: string, passwor
     } catch (emailError) {
       console.error("Login email sending failed:", emailError);
     }
+
+
+	
 
 		return {
 			success: true,

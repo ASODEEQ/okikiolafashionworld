@@ -11,9 +11,14 @@ const LoginForm = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false); // ✅ Added loader state
+
   const registerUserHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // start loading
     const updateP = await loginAction(userForm);
+    setLoading(false); // stop loading
+
     if (updateP.success) {
       if (updateP.isAdmin) {
         router.push("/adminadd");
@@ -79,9 +84,38 @@ const LoginForm = () => {
 
           <button
             type="submit"
-            className="h-12 rounded-xl bg-pink-600 hover:bg-pink-700 transition font-medium text-white shadow-md"
+            disabled={loading}
+            className={`h-12 rounded-xl bg-pink-600 hover:bg-pink-700 transition font-medium text-white shadow-md flex items-center justify-center gap-2 ${
+              loading ? "opacity-75 cursor-not-allowed" : ""
+            }`}
           >
-            Sign In
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Signing In...</span>
+              </>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </div>
 
