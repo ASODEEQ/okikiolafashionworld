@@ -3,6 +3,9 @@ import { useCart } from "@/context/cartcontext";
 import Link from "next/link";
 import { generateReceipt } from "@/lib/receipt";
 
+
+export const dynamic = "force-dynamic";
+
 export default function CheckoutPage() {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
