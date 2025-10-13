@@ -23,7 +23,7 @@ const LoginForm = () => {
       if (updateP.isAdmin) {
         router.push("/adminadd");
       } else {
-        router.push("/productspage");
+        router.push("/");
       }
     } else {
       alert(updateP.message || "❌ Login failed");
