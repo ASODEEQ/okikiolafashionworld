@@ -21,7 +21,7 @@ const LoginForm = () => {
 
     if (updateP.success) {
       if (updateP.isAdmin) {
-        router.push("/adminadd");
+        router.push("/profile");
       } else {
         router.push("/");
       }
