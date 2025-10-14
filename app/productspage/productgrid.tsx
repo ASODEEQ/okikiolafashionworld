@@ -1,99 +1,317 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { ShoppingCart, User, Menu, X, Facebook, Instagram } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/cartcontext";
 
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { cart } = useCart();
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  size: string;
+  quantity?: number;
+}
+
+export default function ProductGrid({ products }: { products: Product[] }) {
+  const { cart, addToCart } = useCart();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [size, setSize] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6;
+
+  const filtered = products.filter((product) => {
+    return (
+      (search === "" ||
+        product.title.toLowerCase().includes(search.toLowerCase())) &&
+      (category === "" || product.category === category) &&
+      (size === "" || product.size === size)
+    );
+  });
+
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+  const currentProducts = filtered.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filtered.length / productsPerPage);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/30 border-b border-white/20 shadow-sm">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-        {/* Brand */}
-        <Link href="/" className="text-2xl font-bold text-pink-600">
-          OKW
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6 font-medium">
-          <Link href="/" className="hover:text-pink-600 transition">
-            Home
-          </Link>
-          <Link href="/about" className="hover:text-pink-600 transition">
-            About
-          </Link>
-          <Link href="/contact" className="hover:text-pink-600 transition">
-            Contact
-          </Link>
-          <Link href="/address" className="hover:text-pink-600 transition">
-            Address
-          </Link>
-        </nav>
-
-        {/* Icons */}
-        <div className="flex items-center gap-5">
+    <div className="min-h-screen bg-white text-black">
+      {/* 🌸 Header */}
+      <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+          {/* Brand */}
           <Link
-            href="/profile"
-            className="hidden md:flex items-center gap-1 hover:text-pink-600 transition"
+            href="/"
+            className="text-2xl md:text-3xl font-bold text-pink-600 tracking-wide"
           >
-            <User size={20} /> Profile
+            OkikiolaFashionWorld
           </Link>
 
-          <Link href="/checkout" className="relative hover:text-pink-600 transition">
-            <ShoppingCart size={26} />
-            {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full px-2">
-                {cart.length}
-              </span>
-            )}
-          </Link>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex gap-6 text-pink-600 font-medium">
+            <Link href="/" className="hover:text-pink-700 transition">
+              Home
+            </Link>
+            <Link href="/about" className="hover:text-pink-700 transition">
+              About
+            </Link>
+            <Link href="/contact" className="hover:text-pink-700 transition">
+              Contact
+            </Link>
+            <Link href="/address" className="hover:text-pink-700 transition">
+              Address
+            </Link>
+          </nav>
+
+          {/* Icons */}
+          <div className="hidden md:flex items-center gap-5">
+            <Link
+              href="/profile"
+              className="flex items-center gap-1 text-pink-600 hover:text-pink-700 transition"
+            >
+              <User size={22} /> Profile
+            </Link>
+            <Link
+              href="/checkout"
+              className="relative text-pink-600 hover:text-pink-700 transition"
+            >
+              <ShoppingCart size={26} />
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs rounded-full px-2">
+                  {cart.length}
+                </span>
+              )}
+            </Link>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-pink-600 focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-pink-600"
           >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-3 text-pink-600 font-medium"
+            >
+              <Link href="/" className="block hover:text-pink-700">
+                Home
+              </Link>
+              <Link href="/about" className="block hover:text-pink-700">
+                About
+              </Link>
+              <Link href="/contact" className="block hover:text-pink-700">
+                Contact
+              </Link>
+              <Link href="/address" className="block hover:text-pink-700">
+                Address
+              </Link>
+              <Link href="/profile" className="block hover:text-pink-700">
+                Profile
+              </Link>
+              <Link href="/checkout" className="block hover:text-pink-700">
+                Checkout
+              </Link>
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* 🔍 Search and Filters */}
+      <div className="max-w-7xl mx-auto px-6 mt-8 flex flex-wrap justify-between items-center gap-4">
+        <div className="flex flex-wrap gap-3">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="border border-gray-300 p-2 rounded-lg w-56 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white text-black"
+          />
+          <select
+            value={category}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="border border-gray-300 p-2 rounded-lg bg-white text-black"
+          >
+            <option value="">All Categories</option>
+            <option value="clothes">Clothes</option>
+            <option value="bags">Bags</option>
+            <option value="shoes">Shoes</option>
+            <option value="watch">Watch</option>
+            <option value="gadgets">Gadgets</option>
+          </select>
+          <select
+            value={size}
+            onChange={(e) => {
+              setSize(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="border border-gray-300 p-2 rounded-lg bg-white text-black"
+          >
+            <option value="">All Sizes</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+          </select>
         </div>
       </div>
 
-      {/* Mobile Nav Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg"
+      {/* 🛍️ Products Grid */}
+      <div className="max-w-7xl mx-auto p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        {currentProducts.length > 0 ? (
+          currentProducts.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white shadow-lg rounded-2xl overflow-hidden transform transition-all hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <Link href={`/product/${product._id}`} className="block group">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-80 object-cover"
+                />
+                <div className="p-6">
+                  <h2 className="text-2xl font-semibold group-hover:text-pink-600 transition">
+                    {product.title}
+                  </h2>
+                  <p className="text-sm mt-2 line-clamp-2">{product.description}</p>
+                  <div className="mt-4 flex justify-between items-center">
+                    <p className="text-pink-600 font-bold text-lg">
+                      ₦{product.price.toLocaleString()}
+                    </p>
+                    <p className="text-sm">Size: {product.size}</p>
+                  </div>
+                </div>
+              </Link>
+              <div className="flex gap-3 px-6 pb-6">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart({ ...product, quantity: product.quantity ?? 1 });
+                  }}
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition w-1/2"
+                >
+                  Add to Cart
+                </button>
+                <Link
+                  href="/checkout"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition w-1/2 text-center"
+                >
+                  Buy Now
+                </Link>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-16 text-gray-600">
+            <h2 className="text-2xl font-semibold mb-2">No products found</h2>
+            <p>Try adjusting your search or filters.</p>
+          </div>
+        )}
+      </div>
+
+      {/* 🔢 Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-10 gap-3">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === 1
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-pink-600 text-white hover:bg-pink-700"
+            }`}
           >
-            <div className="flex flex-col items-center gap-6 py-6 text-lg font-medium text-black">
-              <Link href="/" onClick={() => setIsOpen(false)} className="hover:text-pink-600">
-                Home
-              </Link>
-              <Link href="/about" onClick={() => setIsOpen(false)} className="hover:text-pink-600">
-                About
-              </Link>
-              <Link href="/contact" onClick={() => setIsOpen(false)} className="hover:text-pink-600">
-                Contact
-              </Link>
-              <Link href="/address" onClick={() => setIsOpen(false)} className="hover:text-pink-600">
-                Address
+            Prev
+          </button>
+          <span className="text-lg font-semibold">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === totalPages
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-pink-600 text-white hover:bg-pink-700"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      {/* 🖤 Footer */}
+      <footer className="mt-16 bg-black text-white">
+        <div className="max-w-7xl mx-auto px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">OkikiolaFashionWorld</h3>
+            <p className="text-sm">
+              Building style, confidence, and trust.
+              <br />
+              No: 50 Akintunde House, Odi-Olowo, Osogbo
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><Link href="/" className="hover:underline">Home</Link></li>
+              <li><Link href="/about" className="hover:underline">About</Link></li>
+              <li><Link href="/contact" className="hover:underline">Contact</Link></li>
+              <li><Link href="/address" className="hover:underline">Address</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+            <p className="text-sm mb-4">
+              Email: support@okwfashionworld.com
+              <br />
+              Phone: +2348130571515
+            </p>
+            <div className="flex space-x-6">
+              <Link
+                href="https://www.facebook.com/profile.php?id=100063646616466"
+                target="_blank"
+                className="text-pink-500 hover:text-pink-700"
+              >
+                <Facebook size={22} />
               </Link>
               <Link
-                href="/profile"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-1 hover:text-pink-600"
+                href="https://www.instagram.com/okikiolafashionstore?igsh=MXZ0ZGlzeGUxcDBpZA=="
+                target="_blank"
+                className="text-pink-500 hover:text-pink-700"
               >
-                <User size={20} /> Profile
+                <Instagram size={22} />
               </Link>
             </div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-    </header>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-700 mt-8 pt-4 text-center text-xs">
+          © {new Date().getFullYear()} OkikiolaFashionWorld. All rights reserved.
+        </div>
+      </footer>
+    </div>
   );
 }
