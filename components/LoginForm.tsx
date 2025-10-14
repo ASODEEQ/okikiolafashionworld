@@ -65,7 +65,7 @@ const LoginForm = () => {
               required
               type="email"
               placeholder="Enter your email"
-              className="rounded-xl border border-gray-300 outline-none px-3 text-sm h-12 focus:border-pink-500 focus:ring-1 focus:ring-pink-400"
+              className="bg-white text-black rounded-xl border border-gray-300 outline-none px-3 text-sm h-12 focus:border-pink-500 focus:ring-1 focus:ring-pink-400"
             />
           </div>
 
@@ -78,7 +78,7 @@ const LoginForm = () => {
               name="password"
               required
               placeholder="Enter your password"
-              className="rounded-xl border border-gray-300 outline-none px-3 text-sm h-12 focus:border-pink-500 focus:ring-1 focus:ring-pink-400"
+              className="bg-white text-black rounded-xl border border-gray-300 outline-none px-3 text-sm h-12 focus:border-pink-500 focus:ring-1 focus:ring-pink-400"
             />
           </div>
 

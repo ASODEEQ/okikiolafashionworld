@@ -57,7 +57,7 @@ const RegisterForm = () => {
                 name={field}
                 required={field !== "phoneNumber"}
                 type={field === "password" ? "password" : "text"}
-                className="rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
+                className="bg-white text-black rounded-lg border border-gray-300 outline-none px-4 text-sm h-12 focus:ring-2 focus:ring-pink-500 transition"
               />
             </div>
           ))}
