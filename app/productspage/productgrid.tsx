@@ -50,7 +50,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             href="/"
             className="text-2xl md:text-3xl font-bold text-pink-600 tracking-wide"
           >
-            OkikiolaFashionWorld
+            OKW
           </Link>
 
           {/* Desktop Nav */}

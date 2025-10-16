@@ -22,9 +22,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4">
           {/* Logo */}
           <h1 className="text-2xl sm:text-3xl font-bold text-pink-600">
-            OKW
+          OKW
           </h1>
-
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 font-medium">
             <Link href="/" className="hover:text-pink-600 transition">

@@ -3,7 +3,8 @@
 import { deleteProduct } from "@/lib/products-action";
 import Link from "next/link";
 import { useState } from "react";
-import {  User, Facebook, Instagram } from "lucide-react";
+import {  User, Facebook, Instagram, ShoppingCart, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Product {
   _id: string;
@@ -17,6 +18,7 @@ interface Product {
 }
 
 export default function AdminProductList({ products }: { products: Product[] }) {
+   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
@@ -40,10 +42,16 @@ export default function AdminProductList({ products }: { products: Product[] }) 
 
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Glass Header */}
-      <header className="backdrop-blur-md bg-white/30 sticky top-0 z-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto flex justify-between items-center px-8 py-4">
-          <nav className="flex items-center gap-6 font-medium">
+        {/* 🌸 Glass Header */}
+      <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/30 border-b border-white/20 shadow-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4">
+          {/* Logo */}
+          <h1 className="text-2xl sm:text-3xl font-bold text-pink-600">
+            OKW
+          </h1>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6 font-medium">
             <Link href="/" className="hover:text-pink-600 transition">
               Home
             </Link>
@@ -58,7 +66,8 @@ export default function AdminProductList({ products }: { products: Product[] }) 
             </Link>
           </nav>
 
-          <div className="flex items-center gap-5">
+          {/* Right Icons (Desktop) */}
+          <div className="hidden md:flex items-center gap-5">
             <Link
               href="/profile"
               className="flex items-center gap-1 hover:text-pink-600 transition"
@@ -66,13 +75,83 @@ export default function AdminProductList({ products }: { products: Product[] }) 
               <User size={20} /> Profile
             </Link>
             <Link
-              href="/adminadd"
-              className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm"
+              href="/checkout"
+              className="relative hover:text-pink-600 transition"
             >
-              Add Product
+              <ShoppingCart size={26} />
             </Link>
           </div>
+
+          {/* Hamburger Icon (Mobile) */}
+          <button
+            className="md:hidden text-pink-600 focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
+
+        {/* ✅ Animated Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg"
+            >
+              <nav className="flex flex-col items-center gap-4 py-6 font-medium">
+                <Link
+                  href="/"
+                  className="hover:text-pink-600 transition"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/about"
+                  className="hover:text-pink-600 transition"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="hover:text-pink-600 transition"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <Link
+                  href="/address"
+                  className="hover:text-pink-600 transition"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Address
+                </Link>
+
+                <div className="flex items-center gap-5 mt-4">
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-1 hover:text-pink-600 transition"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <User size={20} /> Profile
+                  </Link> 
+                  <Link
+                    href="/checkout"
+                    className="relative hover:text-pink-600 transition"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <ShoppingCart size={26} />
+                  </Link>
+                </div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Search Bar */}
